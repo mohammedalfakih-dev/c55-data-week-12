@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: airflow_taxi
+    description: Raw green taxi trips loaded monthly by the Airflow DAG.
+    schema: "{{ env_var('PG_SCHEMA') }}"
+
+    tables:
+      - name: raw_trips
+        description: >
+          NYC Green Taxi trip records loaded into the student's personal
+          airflow schema. Each Airflow run replaces one logical month.
+
+  - name: nyc_taxi
+    description: Shared NYC taxi reference data loaded during an earlier week.
+    schema: nyc_taxi
+
+    tables:
+      - name: raw_zones
+        description: >
+          Shared TLC taxi zone lookup containing the location ID and borough
+          used by the Week 10 dbt models.

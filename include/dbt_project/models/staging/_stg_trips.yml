@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: stg_trips
+    description: "Staging model with one row per NYC Green Taxi trip, built from nyc_taxi.raw_trips. It keeps the columns needed for the borough daily mart and filters rows with missing pickup location or negative fare."
+    columns:
+      - name: pickup_datetime
+        description: "Timestamp when the trip started. Used to derive the pickup date in the mart."
+        data_tests:
+          - not_null
+      - name: pickup_location_id
+        description: "TLC pickup zone identifier. Used to join trips to the zone lookup table."
+        data_tests:
+          - not_null
+      - name: fare_amount
+        description: "Base fare amount charged for the trip, in US dollars. Negative fares are removed in staging"
+      - name: tip_amount
+        description: "Tip amount paid for the trip, in US dollars"
+      - name: trip_distance
+        description: "Trip distance recorded by the taxi meter, in miles."
+      - name: tip_pct
+        description: "Tip ratio calculated as tip_amount divided by fare_amount. It is NULL when fare_amount is zero."

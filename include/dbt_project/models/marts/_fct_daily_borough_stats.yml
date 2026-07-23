@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: fct_daily_borough_stats
+    description: >
+      Daily borough-level taxi mart with one row per pickup borough and pickup date.
+      It is built from stg_trips joined to stg_zones. Rows with missing pickup_location_id
+      or negative fare_amount are removed in staging, and trips with pickup location IDs
+      that do not exist in stg_zones are dropped by the inner join. The avg_tip_pct warning
+      test can return rows where small borough/date groups have unusually high average tip ratios.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - pickup_borough
+            - pickup_date
+
+    columns:
+      - name: pickup_borough
+        description: "Borough or TLC zone label where the trip was picked up, taken from the taxi zone lookup table."
+        data_tests:
+          - not_null
+
+      - name: pickup_date
+        description: "Calendar date of the trip pickup, derived from pickup_datetime. Unit: date."
+        data_tests:
+          - not_null
+
+      - name: trip_count
+        description: "Number of trips picked up in this borough on this date. Unit: trips."
+
+      - name: total_fare
+        description: "Sum of fare_amount for trips picked up in this borough on this date. Unit: US dollars."
+
+      - name: avg_tip_pct
+        description: "Average tip ratio for trips in this borough on this date, calculated as tip_amount divided by fare_amount. Unit: ratio, not multiplied by 100."
+
+      - name: avg_trip_distance
+        description: "Average recorded trip distance for trips picked up in this borough on this date. Unit: miles."

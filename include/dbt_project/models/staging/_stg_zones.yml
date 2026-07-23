@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: stg_zones
+    description: "Staging model with one row per TLC taxi zone, built from nyc_taxi.raw_zones."
+    columns:
+      - name: location_id
+        description: "Unique TLC zone identifier. Used as the join key from trips to zones."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: borough
+        description: "Borough or zone label for the TLC location, such as Manhattan, Brooklyn, Queens, Bronx, Staten Island, EWR, Unknown, or NaN."
+        data_tests:
+          - not_null

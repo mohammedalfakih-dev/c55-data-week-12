@@ -1,0 +1,25 @@
+name: "nyc_taxi_borough_daily"
+version: "1.0.0"
+config-version: 2
+
+# This project connects to the profile of the same name in profiles.yml.
+profile: "nyc_taxi_borough_daily"
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Folder-level materialization defaults. Staging models stay as views (cheap,
+# always fresh); the mart is built as a table (queried repeatedly by the
+# dashboard). You can override per model with {{ config(materialized='...') }}.
+models:
+  nyc_taxi_borough_daily:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
